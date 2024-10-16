@@ -20,6 +20,8 @@ type Result = {
   meanings: [];
 };
 
+const fontOptions = ["Serif", "Sans Serif", "Mono"];
+
 async function getDefinition(word: string) {
   const res = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
@@ -30,13 +32,12 @@ async function getDefinition(word: string) {
 }
 
 function findAudio(results: Result) {
-  const found: {audio:string} | undefined = results.phonetics.find(
+  const found: { audio: string } | undefined = results.phonetics.find(
     (phonetic: { audio?: string }) => phonetic.audio !== ""
   );
   console.log(found);
 
   return found === undefined ? undefined : (found as { audio: string }).audio;
-
 }
 
 export default function Home() {
@@ -44,7 +45,7 @@ export default function Home() {
   const [results, setresultss] = useState<Result | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDopdownOpen, setIsDopdownOpen] = useState(false);
-  const [font, setFont] = useState('Serif')
+  const [font, setFont] = useState("Serif");
 
   const audioPlayer = useRef<HTMLAudioElement | null>(null);
 
@@ -67,17 +68,19 @@ export default function Home() {
   };
 
   const toggleDropdown = () => {
-    setIsDopdownOpen(!isDopdownOpen)
-  }
+    setIsDopdownOpen(!isDopdownOpen);
+  };
 
   return (
-    <div className="flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto">
+    <div
+      className={`flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto`}
+    >
       <header className="flex py-4 justify-between">
         <IoBook className="text-dark-purple w-16 h-16" />
 
         {/* font menu */}
         <div
-          className="flex flex-col items-center gap-1"
+          className="flex flex-col items-center gap-1 font-bold"
           onClick={toggleDropdown}
         >
           <button className="text-black">{font}</button>
@@ -87,11 +90,21 @@ export default function Home() {
             <IoChevronDownSharp className="text-dark-purple" />
           )}
           <ul
-            className={`${isDopdownOpen ? 'block' : 'hidden'}    absolute top-20 text-black bg-white p-4 rounded-lg shadow-md`}
+            className={`${
+              isDopdownOpen ? "block" : "hidden"
+            }    absolute top-20 text-black bg-white p-4 rounded-lg shadow-md`}
           >
-            <li>Serif</li>
-            <li>SansSerif</li>
-            <li>Mono</li>
+            {fontOptions.map((font) => {
+              return (
+                <li
+                  key={font}
+                  className="hover:text-dark-purple"
+                  onClick={() => setFont(font)}
+                >
+                  {font}
+                </li>
+              );
+            })}
           </ul>
         </div>
 
