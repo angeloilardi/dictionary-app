@@ -23,11 +23,13 @@ async function getDefinition(word: string) {
 }
 
 function findAudio(results: Result) {
-  const found: { audio: string } | undefined = results.phonetics.find(
+  const found: {audio:string} | undefined = results.phonetics.find(
     (phonetic: { audio?: string }) => phonetic.audio !== ""
   );
   console.log(found);
-  return found ? found.audio : undefined;
+
+  return found === undefined ? undefined : (found as { audio: string }).audio;
+
 }
 
 export default function Home() {
@@ -56,7 +58,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col bg-white px-5 min-h-screen mb-16">
+    <div className="flex flex-col bg-white px-5 min-h-screen pb-16">
       <header className="flex py-4">
         <IoBook className="text-dark-purple w-16 h-16" />
       </header>
@@ -89,6 +91,7 @@ export default function Home() {
               <h2 className="text-dark-purple">{results.phonetic}</h2>
             </div>
 
+            {/* auio player */}
             {findAudio(results) !== undefined && (
               <button
                 className="ml-auto rounded-full w-12 h-12 bg-light-purple flex items-center justify-center"
