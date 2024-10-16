@@ -2,7 +2,14 @@
 
 import { useState, useRef, SetStateAction } from "react";
 
-import { IoSearchOutline, IoPlay, IoPause, IoBook } from "react-icons/io5";
+import {
+  IoSearchOutline,
+  IoPlay,
+  IoPause,
+  IoBook,
+  IoChevronDownSharp,
+  IoChevronUpSharp,
+} from "react-icons/io5";
 
 type Result = {
   phonetics: [];
@@ -36,6 +43,8 @@ export default function Home() {
   const [word, setWord] = useState("");
   const [results, setresultss] = useState<Result | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isDopdownOpen, setIsDopdownOpen] = useState(false);
+  const [font, setFont] = useState('Serif')
 
   const audioPlayer = useRef<HTMLAudioElement | null>(null);
 
@@ -57,10 +66,36 @@ export default function Home() {
       : audioPlayer.current?.pause();
   };
 
+  const toggleDropdown = () => {
+    setIsDopdownOpen(!isDopdownOpen)
+  }
+
   return (
-    <div className="flex flex-col bg-white px-5 min-h-screen pb-16 ">
-      <header className="flex py-4">
+    <div className="flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto">
+      <header className="flex py-4 justify-between">
         <IoBook className="text-dark-purple w-16 h-16" />
+
+        {/* font menu */}
+        <div
+          className="flex flex-col items-center gap-1"
+          onClick={toggleDropdown}
+        >
+          <button className="text-black">{font}</button>
+          {isDopdownOpen ? (
+            <IoChevronUpSharp className="text-dark-purple" />
+          ) : (
+            <IoChevronDownSharp className="text-dark-purple" />
+          )}
+          <ul
+            className={`${isDopdownOpen ? 'block' : 'hidden'}    absolute top-20 text-black bg-white p-4 rounded-lg shadow-md`}
+          >
+            <li>Serif</li>
+            <li>SansSerif</li>
+            <li>Mono</li>
+          </ul>
+        </div>
+
+        <p className="text-dark-purple text-6xl">DICTIONARY</p>
       </header>
       {/* search bar */}
       <form action={handleSubmit}>
@@ -70,7 +105,7 @@ export default function Home() {
         >
           <input
             type="text"
-            className="h-16 w-full bg-very-light-gray placeholder:text-black text-black placeholder:font-bold font-bold focus:placeholder-transparent focus:ring-0 focus:outline-none"
+            className="h-16 w-full bg-very-light-gray placeholder:text-black text-black placeholder:font-bold font-bold focus:placeholder-transparent focus:ring-0 focus:outline-none p-3"
             placeholder="Search for any word..."
             id="search-bar"
             name="word"
@@ -157,7 +192,11 @@ export default function Home() {
           {results.sourceUrls && (
             <>
               <p className="text-light-gray text-sm mt-6">Source</p>
-              <a href={results.sourceUrls[0]} className="underline text-gray">
+              <a
+                href={results.sourceUrls[0]}
+                target="_blank"
+                className="underline text-gray"
+              >
                 {results.sourceUrls[0]}
               </a>
             </>
