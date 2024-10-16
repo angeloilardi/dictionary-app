@@ -58,7 +58,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col bg-white px-5 min-h-screen pb-16">
+    <div className="flex flex-col bg-white px-5 min-h-screen pb-16 ">
       <header className="flex py-4">
         <IoBook className="text-dark-purple w-16 h-16" />
       </header>
@@ -70,7 +70,7 @@ export default function Home() {
         >
           <input
             type="text"
-            className="h-16 w-full bg-very-light-gray placeholder:text-black placeholder:font-bold font-bold focus:placeholder-transparent focus:ring-0 focus:outline-none"
+            className="h-16 w-full bg-very-light-gray placeholder:text-black text-black placeholder:font-bold font-bold focus:placeholder-transparent focus:ring-0 focus:outline-none"
             placeholder="Search for any word..."
             id="search-bar"
             name="word"
@@ -87,7 +87,7 @@ export default function Home() {
         <>
           <div className="flex py-6 flex-wrap">
             <div className="flex flex-col gap-4">
-              <h1 className="text-3xl font-bold">{results.word}</h1>
+              <h1 className="text-3xl font-bold text-black">{results.word}</h1>
               <h2 className="text-dark-purple">{results.phonetic}</h2>
             </div>
 
@@ -134,7 +134,7 @@ export default function Home() {
                         }) => {
                           {
                             return (
-                              <li className="marker:text-dark-purple">
+                              <li className="marker:text-dark-purple text-gray">
                                 {definition.definition}
                                 {definition.example && (
                                   <p className="text-light-gray marker:text-transparent">
@@ -157,7 +157,7 @@ export default function Home() {
           {results.sourceUrls && (
             <>
               <p className="text-light-gray text-sm mt-6">Source</p>
-              <a href={results.sourceUrls[0]} className="underline">
+              <a href={results.sourceUrls[0]} className="underline text-gray">
                 {results.sourceUrls[0]}
               </a>
             </>
