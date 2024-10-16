@@ -15,7 +15,7 @@ const config: Config = {
         "light-purple": "#e9d0fa",
         "black": "#343434",
         "gray": "#757575",
-        "light-gray": "#e9e9e9",
+        "light-gray": "#848484",
         "very-light-gray": "#f4f4f4"
     
       
