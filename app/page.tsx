@@ -150,7 +150,7 @@ export default function Home() {
             <IoSearchOutline className="text-dark-purple w-6 h-6 m-4" />
           </button>
         </label>
-        {errors.word && getFieldState("word").isTouched && <p role="alert" className="text-red-600 mt-3 ml-2">{errors.word.message}</p>}
+        {errors.word && getFieldState("word").isTouched && <p role="alert" className="text-red-600 mt-3 ml-2 text-sms">{errors.word.message}</p>}
 
         {/* <p
           className="hidden group-invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600 
