@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useRef, SetStateAction } from "react";
+import { useState, useRef } from "react";
+
+import { useForm, SubmitHandler } from "react-hook-form";
 
 import {
   IoSearchOutline,
@@ -19,6 +21,10 @@ type Result = {
   phonetic: string;
   meanings: [];
 };
+
+interface IFormInput {
+  word: string;
+}
 
 const fontOptions = ["Serif", "Sans-Serif", "Mono"];
 
@@ -41,7 +47,8 @@ function findAudio(results: Result) {
 }
 
 export default function Home() {
-  const [word, setWord] = useState("");
+
+  const { register, handleSubmit } = useForm<IFormInput>();
   const [results, setresultss] = useState<Result | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDopdownOpen, setIsDopdownOpen] = useState(false);
@@ -49,15 +56,9 @@ export default function Home() {
 
   const audioPlayer = useRef<HTMLAudioElement | null>(null);
 
-  const handleInputChange = (event: {
-    target: { value: SetStateAction<string> };
-  }) => {
-    setWord(event.target.value);
-  };
 
-  const handleSubmit = async () => {
-    setresultss(await getDefinition(word));
-  };
+  const onSubmit: SubmitHandler<IFormInput> = async (data) =>
+    setresultss(await getDefinition(data.word))
 
   const togglePlayPause = () => {
     const prevState = isPlaying;
@@ -73,13 +74,17 @@ export default function Home() {
 
   return (
     <div
-      className={`${font === 'Serif' ? 'font-serif' : `${font === "Sans-Serif" ? 'font-sans' : 'font-mono'}`} flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto`}
+      className={`${
+        font === "Serif"
+          ? "font-serif"
+          : `${font === "Sans-Serif" ? "font-sans" : "font-mono"}`
+      } flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto`}
     >
-      <header className="flex py-4 justify-between">
-        <IoBook className="text-dark-purple w-16 h-16" />
+      <header className="flex py-4 justify-between items-center gap-2 flex-wrap-reverse">
+        <IoBook className="text-dark-purple w-12 h-12 lg:w-16 lg:h-16 shrink-0" />
 
         {/* font menu */}
-        <div className="font-bold" onClick={toggleDropdown}>
+        <div className="font-bold shrink-0" onClick={toggleDropdown}>
           <div className="flex items-center gap-1">
             <button className="text-black">{font}</button>
             {isDopdownOpen ? (
@@ -111,27 +116,38 @@ export default function Home() {
           </ul>
         </div>
 
-        <p className="text-dark-purple text-6xl">DICTIONARY</p>
+        <p className="text-dark-purple text-2xl lg:text-6xl flex-shrink font-bold">
+          DICTIONARY
+        </p>
       </header>
       {/* search bar */}
-      <form action={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)} className="group">
         <label
           htmlFor="search-bar"
-          className="flex items-center rounded-lg border-solid bg-very-light-gray px-3 has-[:focus]:border has-[:focus]:border-dark-purple"
+          className="flex items-center rounded-lg border-solid bg-very-light-gray px-3 has-[:focus]:border has-[:focus]:border-dark-purple has-[:invalid]:border-red-600"
         >
           <input
             type="text"
             className="h-16 w-full bg-very-light-gray placeholder:text-black text-black placeholder:font-bold font-bold focus:placeholder-transparent focus:ring-0 focus:outline-none p-3"
             placeholder="Search for any word..."
             id="search-bar"
-            name="word"
-            value={word}
-            onChange={handleInputChange}
+            // name="word"
+            // value={word}
+            // onChange={handleInputChange}
+            // required
+            {...register("word", { required: true })}
           />
           <button type="submit">
             <IoSearchOutline className="text-dark-purple w-6 h-6 m-4" />
           </button>
         </label>
+        <p
+          className="hidden group-invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600 
+        
+        group-invalid:[&:not(:placeholder-shown):not(:focus)]:block"
+        >
+          {"can't be empty"}
+        </p>
       </form>
 
       {results && (
