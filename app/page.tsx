@@ -48,7 +48,15 @@ function findAudio(results: Result) {
 
 export default function Home() {
 
-  const { register, handleSubmit } = useForm<IFormInput>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getFieldState,
+  } = useForm<IFormInput>({
+    mode: "onTouched",
+  });
+
   const [results, setresultss] = useState<Result | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDopdownOpen, setIsDopdownOpen] = useState(false);
@@ -131,23 +139,26 @@ export default function Home() {
             className="h-16 w-full bg-very-light-gray placeholder:text-black text-black placeholder:font-bold font-bold focus:placeholder-transparent focus:ring-0 focus:outline-none p-3"
             placeholder="Search for any word..."
             id="search-bar"
+          defaultValue=''
             // name="word"
             // value={word}
             // onChange={handleInputChange}
             // required
-            {...register("word", { required: true })}
+            {...register("word", { required: "Please enter a word" })}
           />
           <button type="submit">
             <IoSearchOutline className="text-dark-purple w-6 h-6 m-4" />
           </button>
         </label>
-        <p
+        {errors.word && getFieldState("word").isTouched && <p role="alert" className="text-red-600 mt-3 ml-2">{errors.word.message}</p>}
+
+        {/* <p
           className="hidden group-invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600 
         
         group-invalid:[&:not(:placeholder-shown):not(:focus)]:block"
         >
           {"can't be empty"}
-        </p>
+        </p> */}
       </form>
 
       {results && (
