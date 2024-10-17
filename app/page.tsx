@@ -20,7 +20,7 @@ type Result = {
   meanings: [];
 };
 
-const fontOptions = ["Serif", "Sans Serif", "Mono"];
+const fontOptions = ["Serif", "Sans-Serif", "Mono"];
 
 async function getDefinition(word: string) {
   const res = await fetch(
@@ -73,35 +73,38 @@ export default function Home() {
 
   return (
     <div
-      className={`flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto`}
+      className={`${font === 'Serif' ? 'font-serif' : `${font === "Sans-Serif" ? 'font-sans' : 'font-mono'}`} flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto`}
     >
       <header className="flex py-4 justify-between">
         <IoBook className="text-dark-purple w-16 h-16" />
 
         {/* font menu */}
-        <div
-          className="flex flex-col items-center gap-1 font-bold"
-          onClick={toggleDropdown}
-        >
-          <button className="text-black">{font}</button>
-          {isDopdownOpen ? (
-            <IoChevronUpSharp className="text-dark-purple" />
-          ) : (
-            <IoChevronDownSharp className="text-dark-purple" />
-          )}
+        <div className="font-bold" onClick={toggleDropdown}>
+          <div className="flex items-center gap-1">
+            <button className="text-black">{font}</button>
+            {isDopdownOpen ? (
+              <IoChevronUpSharp className="text-dark-purple" />
+            ) : (
+              <IoChevronDownSharp className="text-dark-purple" />
+            )}
+          </div>
           <ul
             className={`${
               isDopdownOpen ? "block" : "hidden"
-            }    absolute top-20 text-black bg-white p-4 rounded-lg shadow-md`}
+            }    absolute top-112 text-black bg-white p-4 rounded-lg shadow-md`}
           >
-            {fontOptions.map((font) => {
+            {fontOptions.map((option) => {
               return (
                 <li
-                  key={font}
-                  className="hover:text-dark-purple"
-                  onClick={() => setFont(font)}
+                  key={option}
+                  className={`hover:text-dark-purple ${
+                    option === "Serif"
+                      ? "font-serif"
+                      : `${option === "Sans-Serif" ? "font-sans" : "font-mono"}`
+                  }`}
+                  onClick={() => setFont(option)}
                 >
-                  {font}
+                  {option}
                 </li>
               );
             })}
