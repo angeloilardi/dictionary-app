@@ -33,7 +33,7 @@ async function getDefinition(word: string) {
     `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
   );
   const data = await res.json();
-  // console.log(data);
+  console.log(data[0]);
   return data[0];
 }
 
@@ -57,7 +57,7 @@ export default function Home() {
     mode: "onTouched",
   });
 
-  const [results, setresultss] = useState<Result | null>(null);
+  const [results, setresultss] = useState<Result | null | undefined>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDopdownOpen, setIsDopdownOpen] = useState(false);
   const [font, setFont] = useState("Serif");
@@ -139,7 +139,7 @@ export default function Home() {
             className="h-16 w-full bg-very-light-gray placeholder:text-black text-black placeholder:font-bold font-bold focus:placeholder-transparent focus:ring-0 focus:outline-none p-3"
             placeholder="Search for any word..."
             id="search-bar"
-          defaultValue=''
+            defaultValue=""
             // name="word"
             // value={word}
             // onChange={handleInputChange}
@@ -150,18 +150,14 @@ export default function Home() {
             <IoSearchOutline className="text-dark-purple w-6 h-6 m-4" />
           </button>
         </label>
-        {errors.word && getFieldState("word").isTouched && <p role="alert" className="text-red-600 mt-3 ml-2 text-sms">{errors.word.message}</p>}
-
-        {/* <p
-          className="hidden group-invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600 
-        
-        group-invalid:[&:not(:placeholder-shown):not(:focus)]:block"
-        >
-          {"can't be empty"}
-        </p> */}
+        {errors.word && getFieldState("word").isTouched && (
+          <p role="alert" className="text-red-600 mt-3 ml-2 text-sms">
+            {errors.word.message}
+          </p>
+        )}
       </form>
 
-      {results && (
+      {results && results !== undefined && (
         <>
           <div className="flex py-6 flex-wrap">
             <div className="flex flex-col gap-4">
@@ -169,7 +165,7 @@ export default function Home() {
               <h2 className="text-dark-purple">{results.phonetic}</h2>
             </div>
 
-            {/* auio player */}
+   
             {findAudio(results) !== undefined && (
               <button
                 className="ml-auto rounded-full w-12 h-12 bg-light-purple flex items-center justify-center"
@@ -190,7 +186,7 @@ export default function Home() {
             )}
           </div>
 
-          {/* definitions */}
+         
           <div className="flex flex-col gap-8 py-9">
             {results.meanings.map(
               (meaning: { definitions: []; partOfSpeech: string }, index) => {
@@ -246,6 +242,10 @@ export default function Home() {
           )}
         </>
       )}
+
+      {results === undefined && <div className="flex items-center justify-center h-full grow">
+        <p className="text-black text-2xl text-center">Sorry, we couldn&apos;t find definitions for the word you were looking for 🤷‍♂️</p>
+      </div>}
     </div>
   );
 }
