@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -46,6 +46,8 @@ function findAudio(results: Result) {
   return found === undefined ? undefined : (found as { audio: string }).audio;
 }
 
+
+
 export default function Home() {
 
   const {
@@ -61,8 +63,21 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDopdownOpen, setIsDopdownOpen] = useState(false);
   const [font, setFont] = useState("Serif");
+  // const [randomWords, setRandomWords] = useState<[] | null>(null);
 
   const audioPlayer = useRef<HTMLAudioElement | null>(null);
+
+  // useEffect(() => {
+  //   async function fetchRandomWords() {
+  //     const res = await fetch(
+  //       "https://random-word-api.herokuapp.com/word?number=10"
+  //     );
+  //     const data = await res.json();
+  //     setRandomWords(data)
+  //   }
+  //  fetchRandomWords();
+
+  // }, [])
 
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) =>
@@ -88,8 +103,10 @@ export default function Home() {
           : `${font === "Sans-Serif" ? "font-sans" : "font-mono"}`
       } flex flex-col bg-white px-5 min-h-screen pb-16 max-w-6xl mx-auto`}
     >
-      <header className="flex py-4 justify-between items-center gap-2 flex-wrap-reverse">
-        <IoBook className="text-dark-purple w-12 h-12 lg:w-16 lg:h-16 shrink-0" />
+      <header className="flex py-4 items-center gap-2 flex-wrap-reverse">
+        <a href="/">
+          <IoBook className="text-dark-purple w-12 h-12 lg:w-16 lg:h-16 shrink-0" />
+        </a>
 
         {/* font menu */}
         <div className="font-bold shrink-0" onClick={toggleDropdown}>
@@ -124,7 +141,7 @@ export default function Home() {
           </ul>
         </div>
 
-        <p className="text-dark-purple text-2xl lg:text-6xl flex-shrink font-bold">
+        <p className="text-dark-purple text-2xl lg:text-6xl flex-shrink font-bold ml-auto">
           DICTIONARY
         </p>
       </header>
@@ -140,10 +157,6 @@ export default function Home() {
             placeholder="Search for any word..."
             id="search-bar"
             defaultValue=""
-            // name="word"
-            // value={word}
-            // onChange={handleInputChange}
-            // required
             {...register("word", { required: "Please enter a word" })}
           />
           <button type="submit">
@@ -156,6 +169,27 @@ export default function Home() {
           </p>
         )}
       </form>
+
+{/* random words gneration */}
+      {/* {!results && (
+        <div className="flex flex-col gap-4 mt-6">
+          <p className="text-black font-bold">..or give one of these a try!</p>
+          <ul className="!list-disc list-outside flex flex-col gap-5 ml-5">
+            {randomWords &&
+              randomWords.map((word) => {
+                return (
+                  <li key={word} className="marker:text-dark-purple text-gray">
+                    <button
+                      onClick={async () =>
+                        setresultss(await getDefinition(word))
+                      }
+                    >{word }</button>
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
+      )} */}
 
       {results && results !== undefined && (
         <>
