@@ -165,7 +165,6 @@ export default function Home() {
               <h2 className="text-dark-purple">{results.phonetic}</h2>
             </div>
 
-   
             {findAudio(results) !== undefined && (
               <button
                 className="ml-auto rounded-full w-12 h-12 bg-light-purple flex items-center justify-center"
@@ -186,7 +185,6 @@ export default function Home() {
             )}
           </div>
 
-         
           <div className="flex flex-col gap-8 py-9">
             {results.meanings.map(
               (meaning: { definitions: []; partOfSpeech: string }, index) => {
@@ -243,9 +241,19 @@ export default function Home() {
         </>
       )}
 
-      {results === undefined && <div className="flex items-center justify-center h-full grow">
-        <p className="text-black text-2xl text-center">Sorry, we couldn&apos;t find definitions for the word you were looking for 🤷‍♂️</p>
-      </div>}
+      {results === undefined && (
+        <div className="flex flex-col items-center justify-center h-full grow">
+          <p className="text-black text-2xl text-center">
+            Sorry, we couldn&apos;t find definitions for the word you were
+            looking for
+          </p>
+          <img
+            src="images/tumbleweed-emptystate-lightbg.gif"
+            alt="tumble weed rolling"
+            className="w-full"
+          />
+        </div>
+      )}
     </div>
   );
 }
