@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -63,21 +63,21 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDopdownOpen, setIsDopdownOpen] = useState(false);
   const [font, setFont] = useState("Serif");
-  // const [randomWords, setRandomWords] = useState<[] | null>(null);
+  const [randomWords, setRandomWords] = useState<[] | null>(null);
 
   const audioPlayer = useRef<HTMLAudioElement | null>(null);
 
-  // useEffect(() => {
-  //   async function fetchRandomWords() {
-  //     const res = await fetch(
-  //       "https://random-word-api.herokuapp.com/word?number=10"
-  //     );
-  //     const data = await res.json();
-  //     setRandomWords(data)
-  //   }
-  //  fetchRandomWords();
+  useEffect(() => {
+    async function fetchRandomWords() {
+      const res = await fetch(
+        "https://random-word-api.herokuapp.com/word?number=10"
+      );
+      const data = await res.json();
+      setRandomWords(data)
+    }
+   fetchRandomWords();
 
-  // }, [])
+  }, [])
 
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) =>
@@ -171,7 +171,7 @@ export default function Home() {
       </form>
 
 {/* random words gneration */}
-      {/* {!results && (
+      {results === null && (
         <div className="flex flex-col gap-4 mt-6">
           <p className="text-black font-bold">..or give one of these a try!</p>
           <ul className="!list-disc list-outside flex flex-col gap-5 ml-5">
@@ -189,7 +189,7 @@ export default function Home() {
               })}
           </ul>
         </div>
-      )} */}
+      )}
 
       {results && results !== undefined && (
         <>
