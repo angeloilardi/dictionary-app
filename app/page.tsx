@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+
 
 import {
   IoSearchOutline,
@@ -63,21 +64,21 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDopdownOpen, setIsDopdownOpen] = useState(false);
   const [font, setFont] = useState("Serif");
-  const [randomWords, setRandomWords] = useState<[] | null>(null);
+  // const [randomWords, setRandomWords] = useState<[] | null>(null);
 
   const audioPlayer = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    async function fetchRandomWords() {
-      const res = await fetch(
-        "https://random-word-api.herokuapp.com/word?number=10"
-      );
-      const data = await res.json();
-      setRandomWords(data)
-    }
-   fetchRandomWords();
+  // useEffect(() => {
+  //   async function fetchRandomWords() {
+  //     const res = await fetch(
+  //       "https://random-word-api.herokuapp.com/word?number=10"
+  //     );
+  //     const data = await res.json();
+  //     setRandomWords(data)
+  //   }
+  //  fetchRandomWords();
 
-  }, [])
+  // }, [])
 
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) =>
@@ -170,25 +171,26 @@ export default function Home() {
         )}
       </form>
 
-{/* random words gneration */}
+      {/* random words gneration */}
       {results === null && (
-        <div className="flex flex-col gap-4 mt-6">
-          <p className="text-black font-bold">..or give one of these a try!</p>
-          <ul className="!list-disc list-outside flex flex-col gap-5 ml-5">
-            {randomWords &&
-              randomWords.map((word) => {
-                return (
-                  <li key={word} className="marker:text-dark-purple text-gray">
-                    <button
-                      onClick={async () =>
-                        setresultss(await getDefinition(word))
-                      }
-                    >{word }</button>
-                  </li>
-                );
-              })}
-          </ul>
-        </div>
+        // <div className="flex flex-col gap-4 mt-6">
+        //   <p className="text-black font-bold">..or give one of these a try!</p>
+        //   <ul className="!list-disc list-outside flex flex-col gap-5 ml-5">
+        //     {randomWords &&
+        //       randomWords.map((word) => {
+        //         return (
+        //           <li key={word} className="marker:text-dark-purple text-gray">
+        //             <button
+        //               onClick={async () =>
+        //                 setresultss(await getDefinition(word))
+        //               }
+        //             >{word }</button>
+        //           </li>
+        //         );
+        //       })}
+        //   </ul>
+        // </div>
+        <div className="p-12 mx-auto"><img src="/images/undraw_knowledge_re_5v9l.svg" className="max-w-sm" alt="" /></div>
       )}
 
       {results && results !== undefined && (
